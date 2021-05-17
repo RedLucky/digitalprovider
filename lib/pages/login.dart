@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:digitalprovider/model/profile.dart';
 import 'package:digitalprovider/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -30,24 +32,20 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // gambar
-              Container(
-                height: MediaQuery.of(context).size.height * 0.43,
-                child: Center(
-                  child: Text(
-                    'Ini diisi gambar',
-                    style: TextStyle(color: Colors.white, fontSize: 18.0),
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: MediaQuery.of(context).size.height * 0.43,
+              //   child: Center(
+              //     child: Text(
+              //       'Ini diisi gambar',
+              //       style: TextStyle(color: Colors.white, fontSize: 18.0),
+              //     ),
+              //   ),
+              // ),
               // intro
               Container(
-                height: MediaQuery.of(context).size.height * 0.40,
-                child: Center(
-                  child: Text(
-                    'Ini diisi tulisan apasaja',
-                    style: TextStyle(color: Colors.white, fontSize: 18.0),
-                  ),
-                ),
+                margin: EdgeInsets.only(top: 24.0),
+                height: MediaQuery.of(context).size.height * 0.80,
+                child: Carousel(),
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.17,
@@ -104,10 +102,11 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  if (myFormController.text == '082234561608') {
+                                  if (myFormController.text ==
+                                      profile.phoneNumber) {
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
-                                      return Home();
+                                      return Home(profile: profile);
                                     }));
                                   } else {
                                     showDialog(
@@ -131,6 +130,205 @@ class _LoginState extends State<Login> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Carousel extends StatefulWidget {
+  @override
+  _CarouselState createState() => _CarouselState();
+}
+
+class _CarouselState extends State<Carousel> {
+  int _currentIndex = 0;
+  List cardList = [Item1(), Item2(), Item3(), Item4()];
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 500.0,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 5),
+              autoPlayAnimationDuration: Duration(milliseconds: 1200),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              pauseAutoPlayOnTouch: true,
+              aspectRatio: 2.0,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
+            items: cardList.map((card) {
+              return Builder(builder: (BuildContext context) {
+                return Container(
+                  height: MediaQuery.of(context).size.height * 0.30,
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    color: Colors.blueAccent,
+                    child: card,
+                  ),
+                );
+              });
+            }).toList(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: map<Widget>(cardList, (index, url) {
+              return Container(
+                width: 10.0,
+                height: 10.0,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentIndex == index ? Colors.white : Colors.grey,
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Item1 extends StatelessWidget {
+  const Item1({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [
+              0.3,
+              1
+            ],
+            colors: [
+              Color(0xffff4000),
+              Color(0xffffcc66),
+            ]),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Atur Semua lewat",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold)),
+          Text("handpone kamu",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}
+
+class Item2 extends StatelessWidget {
+  const Item2({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.3, 1],
+            colors: [Color(0xff5f2c82), Color(0xff49a09d)]),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Banner 2",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold)),
+          Text("Lorem Ipsum",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}
+
+class Item3 extends StatelessWidget {
+  const Item3({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [
+              0.3,
+              1
+            ],
+            colors: [
+              Color(0xffff4000),
+              Color(0xffffcc66),
+            ]),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Banner 3",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold)),
+          Text("Lorem Ipsum",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}
+
+class Item4 extends StatelessWidget {
+  const Item4({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("Banner 4",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold)),
+          Text("Lorem Ipsum",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600)),
+        ],
       ),
     );
   }
